@@ -16,7 +16,7 @@ Stato al 1/11/2026. Lo stack gira su dhgeo con la porta solo su 127.0.0.1, in at
 ## Da fare
 
 - [ ] Verifica via tunnel SSH con un account: login, progetti, storico, download (le credenziali sono da chiedere a Faunalia)
-- [ ] `pg_dump` di riserva da Faunalia (richiesto)
+- [ ] `pg_dump` di riserva da Faunalia (da chiedere: il DB ripristinato è già risultato coerente)
 - [ ] Ticket DNS per `mergin.dh.unica.it` → 90.147.144.144
 - [ ] Firewall `DOCKER-USER` e porta sull'IP di dhgeo
 - [ ] Virtual host nel proxy (PR su `proxy.dh.unica`, da unire solo a DNS attivo)
