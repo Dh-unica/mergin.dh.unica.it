@@ -19,9 +19,9 @@ done
 
 echo "API:"
 ping=$(curl -s "http://$PORTA/ping")
-echo "$ping" | grep -q '"version"' && ok "/ping $(echo "$ping" | tr -d '\n ' | cut -c1-120)" || ko "/ping: $ping"
+[[ "$ping" == *'"version"'* ]] && ok "/ping $(echo "$ping" | tr -d '\n ' | cut -c1-120)" || ko "/ping: $ping"
 config=$(curl -s "http://$PORTA/config")
-echo "$config" | grep -q 'server_type' && ok "/config $(echo "$config" | grep -oE '"(server_type|version)": *"[^"]*"' | tr '\n' ' ')" || ko "/config non valido"
+[[ "$config" == *server_type* ]] && ok "/config $(echo "$config" | grep -oE '"(server_type|version)": *"[^"]*"' | tr '\n' ' ')" || ko "/config non valido"
 codice=$(curl -s -o /dev/null -w '%{http_code}' "http://$PORTA/")
 [ "$codice" = 200 ] && ok "interfaccia web -> 200" || ko "interfaccia web -> $codice"
 

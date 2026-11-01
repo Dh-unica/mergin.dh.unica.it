@@ -15,7 +15,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 DEST=backup
 STAMP=$(date +%F_%H%M)
-mkdir -p "$DEST"
+install -d -m 700 "$DEST"
 # Il backend usa DB_DATABASE, predefinito "postgres": il database "mergin" creato da POSTGRES_DB è vuoto.
 DB=$(grep -E '^DB_DATABASE=' .prod.env | cut -d= -f2 || true)
 DB=${DB:-postgres}
@@ -42,7 +42,8 @@ echo "Versione dello schema (alembic): $schema"
 echo "Utenti: $utenti · progetti: $progetti · versioni di progetto: $versioni"
 
 echo "Dump completo (prova di lettura di tutte le tabelle)..."
-docker compose exec -T db pg_dumpall -U postgres | gzip > "$DEST/mergin_pg_dumpall_$STAMP.sql.gz"
+# il dump contiene anche gli hash delle password dei ruoli: file 600
+(umask 077; docker compose exec -T db pg_dumpall -U postgres | gzip > "$DEST/mergin_pg_dumpall_$STAMP.sql.gz")
 echo "  OK: $(ls -lh "$DEST/mergin_pg_dumpall_$STAMP.sql.gz" | awk '{print $5, $9}')"
 
 if [ "${1:-}" = "--amcheck" ]; then

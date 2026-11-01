@@ -43,15 +43,15 @@ done
 sudo rm -f mergin_db/postmaster.pid
 
 # .prod.env: segreti originali, valori del DH. SECURITY_PASSWORD_SALT non si tocca mai.
+# umask 077 prima di creare i file, così i segreti non sono mai leggibili da altri.
+umask 077
 sudo cat "$TMP/$PREFISSO/.prod.env" \
   | sed -E "s|^MERGIN_BASE_URL=.*|MERGIN_BASE_URL=$BASE_URL|; s|^CONTACT_EMAIL=.*|CONTACT_EMAIL=$CONTATTO|; s|^GLOBAL_STORAGE=.*|GLOBAL_STORAGE=$QUOTA|" \
   > .prod.env
-chmod 600 .prod.env
 {
   grep -E '^DB_PASSWORD=' .prod.env | sed 's/^DB_PASSWORD=/POSTGRES_PASSWORD=/'
   echo "MERGIN_PORT=127.0.0.1:8086"
 } > .env
-chmod 600 .env
 
 echo "Proprietari e permessi (attesi 999:0 700 per mergin_db, 901:999 2750 per projects):"
 sudo stat -c '  %u:%g %a %n' mergin_db projects diagnostic_logs
