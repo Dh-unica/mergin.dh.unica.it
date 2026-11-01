@@ -12,6 +12,7 @@ Stato al 1/11/2026. Lo stack gira su dhgeo con la porta solo su 127.0.0.1, in at
 - [x] Ripristino dall'export: permessi corretti (999:0 700 su `mergin_db`, 901:999 2750 su `projects`)
 - [x] `scripts/verifica-db.sh --amcheck`: recovery concluso, dump completo, 70 indici btree verificati. Nel database `postgres`: 2 utenti, 15 progetti, 151 versioni
 - [x] Stack avviato: `/ping` e `/config` rispondono (CE), interfaccia web raggiungibile da tunnel
+- [x] Backup provato: dump di 148 KB (16 tabelle con dati) e istantanea dei progetti di 6,3 GB, con la manutenzione attiva durante la copia (verificato: i push ricevono 503)
 
 ## Da fare
 
