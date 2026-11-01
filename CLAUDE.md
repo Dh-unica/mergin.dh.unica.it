@@ -6,7 +6,7 @@ Configurazione di produzione e strumenti di manutenzione di mergin.dh.unica.it, 
 
 ## Contesto
 
-- Produzione su **dhgeo** `90.147.144.148`, utente `dhgeo`. SSH: `ssh -o IdentitiesOnly=yes -i ~/.ssh/id_rsa dhgeo@90.147.144.148`. Per sudo la password è in `dh-unica_monitoring/inventory.toml`.
+- Produzione su **dhgeo** `90.147.144.148`, utente `dhgeo`. SSH: `ssh -o IdentitiesOnly=yes -i ~/.ssh/id_rsa dhgeo@90.147.144.148`. La password per sudo non sta nel repository.
 - Stack in `/home/dhgeo/mergin.dh.unica.it` (clone di questo repository più `mergin_db/`, `projects/`, `.prod.env` e `.env` non versionati), Docker Compose v2.
 - Sulla stessa VM gira Lizmap (`/home/dhgeo/lizmap.dh.unica.it`, repository `Dh-unica/lizmap.dh.unica.it`).
 - Pubblicazione tramite il reverse proxy di dhwp (`proxy.dh.unica`, branch `master`: **un push su master va in produzione via cron entro un minuto**).
@@ -22,6 +22,6 @@ Configurazione di produzione e strumenti di manutenzione di mergin.dh.unica.it, 
 - Uid e gid sono numerici e fissi (999, 901:999, 101:999): su dhgeo il gid 999 è il gruppo `docker` e `systemd-journal` è 101, quindi mai `chown` per nome.
 - La porta 8086 si apre verso l'esterno solo con le regole `DOCKER-USER` attive (docs/MIGRAZIONE.md): Docker scavalca `ufw`.
 - Mai stream da `docker run` senza `--log-driver none`: lo stdout finisce nel log del container sul disco.
-- Git: mai commit su `main`. Un branch per attività (`feat/`, `fix/`, `docs/`, `chore/`, `refactor/`), commit in italiano, poi PR, merge e cancellazione del branch. Tag `prod-<data>` per ogni rilascio in produzione. Hook locale: `git config core.hooksPath .githooks`.
+- Git: mai commit su `main`. Un branch per attività (`feat/`, `fix/`, `docs/`, `chore/`, `refactor/`), commit in italiano, poi PR, merge e cancellazione del branch. `main` è protetto su GitHub: si arriva solo da PR con il check «regole» verde. Tag `prod-<data>` per ogni rilascio in produzione. Hook locale: `git config core.hooksPath .githooks`.
 - Mai segreti né dati nel repo: `.prod.env` e `.env` non sono versionati, `.prod.env.example` ha i valori oscurati.
 - Su dhgeo il repository si aggiorna solo con `git pull` (deploy key in sola lettura): lì non si fanno commit.
