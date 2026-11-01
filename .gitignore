@@ -1,0 +1,29 @@
+# segreti
+.env
+.env.*
+!.env.example
+.prod.env
+!.prod.env.example
+**/.prod.env
+
+# dati di Mergin Maps: vivono solo sul server e nei backup
+mergin_db/
+projects/
+diagnostic_logs/
+**/mergin_db/
+**/projects/
+**/diagnostic_logs/
+
+# backup, dump e archivi
+backup/
+*.sql
+*.sql.gz
+*.dump
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+
+# file di lavoro
+.playwright-cli/
+.playwright-mcp/
