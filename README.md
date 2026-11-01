@@ -128,6 +128,7 @@ La configurazione dell'applicazione sta in `.prod.env`, che **non è versionato*
 | `CONTACT_EMAIL` | `dh@unica.it` | contatto dell'amministratore |
 | `GLOBAL_STORAGE` | `32212254720` | quota del workspace: 30 GiB |
 | `USER_SELF_REGISTRATION` | `False` | gli account li crea l'amministratore |
+| `DB_DATABASE` | non impostata | il backend usa il database `postgres`; il database `mergin` è vuoto |
 | `MAIL_SUPPRESS_SEND` | `1` | nessuna mail in uscita: le password le reimposta l'amministratore |
 | `SECURITY_PASSWORD_SALT` | segreto | ⚠️ **non va mai cambiato**: invaliderebbe le password di tutti gli utenti |
 

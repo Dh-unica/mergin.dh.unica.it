@@ -28,6 +28,8 @@ L'export è il clone git di [MerginMaps/server](https://github.com/MerginMaps/se
 6. **Log senza limite.** Aggiunto `json-file` con `max-size: 50m` e `max-file: 3` a tutti i servizi: a ottobre 2026 i log dei container hanno riempito i dischi di dharch e dhlake.
 7. **Configurazione dell'applicazione.** `MERGIN_BASE_URL` da `mergin.webparc.it` a `mergin.dh.unica.it`; `CONTACT_EMAIL` da `admin@faunalia.it` a `dh@unica.it`; `GLOBAL_STORAGE` da 10 a 30 GiB, perché 6,4 GB erano già occupati e il gruppo PARC prevede di caricare immagini e planimetrie.
 
+8. **Il database applicativo è `postgres`, non `mergin`.** `.prod.env` non imposta `DB_DATABASE` né `DB_USER`, quindi il backend usa i predefiniti (`postgres`/`postgres`). Il database `mergin`, creato da `POSTGRES_DB` alla prima inizializzazione, è vuoto. Script di verifica e backup leggono il nome da `.prod.env` con `postgres` come predefinito. Al ripristino del 1/11/2026: 2 utenti, 15 progetti (compresi quelli cancellati, che Mergin rinomina con un suffisso UUID), 151 versioni, schema alembic `35af0c8be41e` e `b9ec9ab6694f`.
+
 ## Procedura
 
 ### Preparazione di dhgeo

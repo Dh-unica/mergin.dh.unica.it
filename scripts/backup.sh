@@ -16,7 +16,9 @@ GIORNI=${GIORNI:-14}
 STAMP=$(date +%F_%H%M)
 sudo mkdir -p "$DEST/db" "$DEST/projects"
 
-docker compose exec -T db pg_dump -U postgres -Fc mergin | sudo tee "$DEST/db/mergin_$STAMP.dump" >/dev/null
+# database del backend: DB_DATABASE di .prod.env, predefinito "postgres"
+DB=$(grep -E '^DB_DATABASE=' .prod.env | cut -d= -f2 || true)
+docker compose exec -T db pg_dump -U postgres -Fc "${DB:-postgres}" | sudo tee "$DEST/db/mergin_$STAMP.dump" >/dev/null
 sudo test -s "$DEST/db/mergin_$STAMP.dump" || { echo "dump vuoto: controlla il container db" >&2; exit 1; }
 
 ULTIMA=$(sudo find "$DEST/projects" -mindepth 1 -maxdepth 1 -type d | sort | tail -1)
