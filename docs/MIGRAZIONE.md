@@ -1,6 +1,6 @@
 # Migrazione di Mergin Maps dal server Faunalia a dhgeo
 
-Fino a ottobre 2026 Faunalia (Ulisse Cavallini) ospitava Mergin Maps su `mergin.webparc.it`. Il 28/10/2026 ha consegnato l'export `mergin_export_20261027.tar.gz` (3,4 GB). Il nuovo indirizzo è `mergin.dh.unica.it`, su dhgeo dietro il reverse proxy del Centro.
+Fino a ottobre 2026 Faunalia ospitava Mergin Maps su `mergin.webparc.it`. Il 28/10/2026 ha consegnato l'export `mergin_export_20261027.tar.gz` (3,4 GB). Il nuovo indirizzo è `mergin.dh.unica.it`, su dhgeo dietro il reverse proxy del Centro.
 
 Il piano complessivo, che comprende Lizmap, la scelta della VM, il DNS e il proxy, sta nella cartella di lavoro `mergin-lizmap/PIANO-MIGRAZIONE.md`. Qui c'è la parte che riguarda Mergin.
 
@@ -20,8 +20,8 @@ L'export è il clone git di [MerginMaps/server](https://github.com/MerginMaps/se
 
 ## Problemi trovati e correzioni
 
-1. **Database copiato con PostgreSQL acceso.** In `mergin_db/` c'erano `postmaster.pid` e file di `pg_stat_tmp/` modificati alle 12:28 del 27/10, un minuto prima della chiusura dell'archivio. Al primo avvio PostgreSQL fa il crash recovery dal WAL. `scripts/verifica-db.sh` avvia il solo database, legge il log del recovery e fa un `pg_dumpall` completo come prova di lettura. A Faunalia è stato chiesto anche un `pg_dump` fatto a servizi fermi.
-2. **Proprietari dei file.** Nell'archivio i file appartengono agli uid 999 e 901, con il gruppo registrato per nome come `systemd-journal` (gid 999 sul server Faunalia). Su dhgeo `systemd-journal` è il gid **101**: un'estrazione senza `--numeric-owner`, come nelle istruzioni ricevute, avrebbe tolto a Nginx e al frontend (che girano come `101:999`) l'accesso ai progetti.
+1. **Database copiato a servizio attivo.** In `mergin_db/` c'erano `postmaster.pid` e file di `pg_stat_tmp/` modificati alle 12:28 del 27/10, un minuto prima della chiusura dell'archivio. Al primo avvio PostgreSQL fa il crash recovery dal WAL. `scripts/verifica-db.sh` avvia il solo database, legge il log del recovery e fa un `pg_dumpall` completo come prova di lettura. Un `pg_dump` fatto a servizi fermi resta utile come copia di riserva.
+2. **Proprietari dei file.** Nell'archivio i file appartengono agli uid 999 e 901, con il gruppo registrato per nome come `systemd-journal` (gid 999 sul server Faunalia). Su dhgeo `systemd-journal` è il gid **101**: un'estrazione come root senza `--numeric-owner` assegnerebbe il gruppo per nome e toglierebbe a Nginx e al frontend (che girano come `101:999`) l'accesso ai progetti.
 3. **Versioni.** Il sorgente del clone è stato aggiornato il 14/10 alla 2026.5.0, ma il compose usa le immagini 2025.7.3 ed è con queste che girava il database. Si resta sulla 2025.7.3; l'aggiornamento è un passo separato.
 4. **Porte.** L'originale pubblicava `8080` e `8082` su tutte le interfacce. La 8082 serviva solo a Grafana (blocco commentato in `nginx.conf`) e non si pubblica più. La 8080 diventa `MERGIN_PORT`, predefinita `127.0.0.1:8086`.
 5. **Password del database in chiaro nel compose.** Ora arriva da `.env` (`POSTGRES_PASSWORD`), ricavata da `DB_PASSWORD` di `.prod.env`: nel pacchetto le due coincidevano.
@@ -50,7 +50,7 @@ scripts/smoke-test.sh
 
 Verifica dal proprio PC con un tunnel: `ssh -L 8086:127.0.0.1:8086 dhgeo@90.147.144.148`, poi `http://localhost:8086`: login, elenco dei progetti, storico delle versioni, download di un progetto.
 
-Se `verifica-db.sh` trova errori: `docker compose down`, rinominare `mergin_db` in `mergin_db.failed-<data>`, creare un database vuoto e ripristinare il `pg_dump` di Faunalia.
+Se `verifica-db.sh` trova errori: `docker compose down`, rinominare `mergin_db` in `mergin_db.failed-<data>`, creare un database vuoto e ripristinare un `pg_dump` di riserva.
 
 ### Pubblicazione
 
