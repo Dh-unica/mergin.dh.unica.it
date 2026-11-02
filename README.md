@@ -86,7 +86,7 @@ flowchart LR
     CW --> PRJ
 ```
 
-Lo stack gira su **dhgeo** (`90.147.144.148`), la VM GIS del Centro, insieme a Lizmap. Il TLS si ferma sul reverse proxy comune [`proxy.dh.unica`](https://github.com/caprowsky/proxy.dh.unica), con il certificato wildcard `*.dh.unica.it`. La porta 8086 di dhgeo accetta connessioni solo dal proxy e dalla VPN d'ateneo.
+Lo stack gira su **dhgeo** (`90.147.144.148`), la VM GIS del Centro, insieme a Lizmap. Il TLS si ferma sul reverse proxy comune [`proxy.dh.unica`](https://github.com/caprowsky/proxy.dh.unica), con il certificato wildcard `*.dh.unica.it`. La porta 8086 di dhgeo accetta connessioni solo dal proxy: la filtra il firewall di dhgeo, che sta nel repository Lizmap (`scripts/firewall-dhgeo.sh`).
 
 I container girano con uid e gid fissi: PostgreSQL come `999`, backend e worker come `901:999`, frontend e Nginx come `101:999`. La cartella `projects/` appartiene a `901:999` con permessi `2750`, e il gruppo 999 è quello che permette a Nginx di servire i file.
 

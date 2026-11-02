@@ -1,6 +1,6 @@
 # Prossimi passi
 
-Stato al 1/11/2026. Lo stack gira su dhgeo con la porta solo su 127.0.0.1, in attesa di DNS e proxy.
+Stato al 2/11/2026. Lo stack gira su dhgeo con la porta solo su 127.0.0.1. Il DNS è attivo: mancano firewall, porta e merge del proxy.
 
 ## Fatto
 
@@ -13,17 +13,19 @@ Stato al 1/11/2026. Lo stack gira su dhgeo con la porta solo su 127.0.0.1, in at
 - [x] `scripts/verifica-db.sh --amcheck`: recovery concluso, dump completo, 70 indici btree verificati. Nel database `postgres`: 2 utenti, 15 progetti, 151 versioni
 - [x] Stack avviato: `/ping` e `/config` rispondono (CE), interfaccia web raggiungibile da tunnel
 - [x] Backup provato: dump di 148 KB (16 tabelle con dati) e istantanea dei progetti di 6,3 GB, con la manutenzione attiva durante la copia (verificato: i push ricevono 503)
+- [x] DNS: `mergin.dh.unica.it` è un CNAME di `dh.unica.it` (90.147.144.144), attivo dal 2/11/2026
+- [x] `pg_dumpall` di riserva da Faunalia (2/11/2026) in `~/archivi-faunalia/pgdump_mergin_unica_20261102.sql`, checksum in `SHA256SUMS`: 15 progetti e 151 versioni, l'ultima del 15/05/2026, come nel DB ripristinato. Dopo l'export non ci sono sincronizzazioni da recuperare
+- [x] Credenziali amministrative ricevute da Faunalia il 2/11/2026 (fuori dal repository)
 
 ## Da fare
 
-- [ ] Verifica via tunnel SSH con un account: login, progetti, storico, download (le credenziali sono da chiedere a Faunalia)
-- [ ] `pg_dump` di riserva da Faunalia (da chiedere: il DB ripristinato è già risultato coerente)
-- [ ] Ticket DNS per `mergin.dh.unica.it` → 90.147.144.144
-- [ ] Firewall `DOCKER-USER` e porta sull'IP di dhgeo
-- [ ] Virtual host nel proxy (PR su `proxy.dh.unica`, da unire solo a DNS attivo)
+- [ ] Verifica via tunnel SSH con un account: login, progetti, storico, download; poi reset delle password
+- [ ] Firewall dal repository Lizmap (`sudo scripts/firewall-dhgeo.sh installa`, copre anche la 8086), poi porta sull'IP di dhgeo e verifica da dhwp
+- [ ] Merge della PR #25 di `proxy.dh.unica` (virtual host), solo dopo la verifica da dhwp
 - [ ] Prova con un telefono e con il plugin QGIS, poi avviso agli utenti del nuovo indirizzo
 - [ ] Backup giornaliero in cron e copia fuori dalla VM
 - [ ] Tag `prod-<data>` sul primo rilascio
+- [ ] Prima dello spegnimento del vecchio server (acceso fino a inizio dicembre 2026), conferma da Faunalia che l'ultima versione di progetto è ancora del 15/05/2026
 
 ## Dopo la messa in servizio
 
