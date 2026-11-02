@@ -1,6 +1,6 @@
 # Prossimi passi
 
-Stato al 2/11/2026. Lo stack gira su dhgeo con la porta solo su 127.0.0.1. Il DNS è attivo: mancano firewall, porta e merge del proxy.
+Stato al 2/11/2026. **In servizio su https://mergin.dh.unica.it** dal 2/11/2026, 14:47 UTC, dietro il proxy di dhwp; porta 8086 sull'IP di dhgeo, filtrata dal firewall del repository Lizmap.
 
 ## Fatto
 
@@ -16,15 +16,14 @@ Stato al 2/11/2026. Lo stack gira su dhgeo con la porta solo su 127.0.0.1. Il DN
 - [x] DNS: `mergin.dh.unica.it` è un CNAME di `dh.unica.it` (90.147.144.144), attivo dal 2/11/2026
 - [x] `pg_dumpall` di riserva da Faunalia (2/11/2026) in `~/archivi-faunalia/pgdump_mergin_unica_20261102.sql`, checksum in `SHA256SUMS`: 15 progetti e 151 versioni, l'ultima del 15/05/2026, come nel DB ripristinato. Dopo l'export non ci sono sincronizzazioni da recuperare
 - [x] Credenziali amministrative ricevute da Faunalia il 2/11/2026 (fuori dal repository)
+- [x] Firewall installato su dhgeo e porta sull'IP della VM (`.env` precedente in `~/env-backup/`): da dhwp `/ping` risponde, dalla VPN va in timeout
+- [x] PR #25 di `proxy.dh.unica` unita (f9238e0), deploy automatico OK. Da Internet: HTTPS valido, redirect da HTTP, `/` a 200, `/ping` `online`
 
 ## Da fare
 
-- [ ] Verifica via tunnel SSH con un account: login, progetti, storico, download; poi reset delle password
-- [ ] Firewall dal repository Lizmap (`sudo scripts/firewall-dhgeo.sh installa`, copre anche la 8086), poi porta sull'IP di dhgeo e verifica da dhwp
-- [ ] Merge della PR #25 di `proxy.dh.unica` (virtual host), solo dopo la verifica da dhwp
-- [ ] Prova con un telefono e con il plugin QGIS, poi avviso agli utenti del nuovo indirizzo
+- [ ] Login su https://mergin.dh.unica.it: progetti, storico, download; poi reset delle password
+- [ ] Prova con un telefono e con il plugin QGIS (URL del server: `https://mergin.dh.unica.it`), poi avviso agli utenti del nuovo indirizzo
 - [ ] Backup giornaliero in cron e copia fuori dalla VM
-- [ ] Tag `prod-<data>` sul primo rilascio
 - [ ] Prima dello spegnimento del vecchio server (acceso fino a inizio dicembre 2026), conferma da Faunalia che l'ultima versione di progetto è ancora del 15/05/2026
 
 ## Dopo la messa in servizio
