@@ -54,9 +54,9 @@ Se `verifica-db.sh` trova errori: `docker compose down`, rinominare `mergin_db` 
 
 ### Pubblicazione
 
-1. **DNS**: record A `mergin.dh.unica.it` → `90.147.144.144`, con ticket a [helpdesk.unica.it](https://helpdesk.unica.it/servicePortal).
+1. **DNS**: `mergin.dh.unica.it` è un CNAME di `dh.unica.it` (90.147.144.144), attivo dal 2/11/2026, chiesto con un ticket a [helpdesk.unica.it](https://helpdesk.unica.it/servicePortal).
 2. **Proxy**: virtual host `mergin_dhunica.conf` in `proxy.dh.unica`, con il certificato wildcard, verso `90.147.144.148:8086`, `client_max_body_size 4G`, `proxy_read_timeout 900s`, buffering delle richieste disattivato.
-3. **Firewall e porta**: regole `DOCKER-USER` (coprono 8084–8087, vedi il repository Lizmap), poi in `.env` `MERGIN_PORT=90.147.144.148:8086` e `docker compose up -d proxy`.
+3. **Firewall e porta**: `sudo scripts/firewall-dhgeo.sh installa` dal repository Lizmap (fase F del suo docs/MIGRAZIONE.md: le regole coprono 8084–8087 e ammettono solo dhwp), poi in `.env` `MERGIN_PORT=90.147.144.148:8086` e `docker compose up -d proxy`. Non serve un ticket al settore reti: dhwp e dhgeo stanno nella stessa sottorete.
 
 ### Comunicazione agli utenti
 

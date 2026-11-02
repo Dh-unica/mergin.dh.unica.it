@@ -20,7 +20,7 @@ Configurazione di produzione e strumenti di manutenzione di mergin.dh.unica.it, 
 - **`SECURITY_PASSWORD_SALT` non si cambia mai**: invaliderebbe le password di tutti gli utenti. `SECRET_KEY` e gli altri salt solo con un motivo, sapendo che chiudono le sessioni attive.
 - I tag delle immagini (`2025.7.3`) e di `postgres:14` cambiano solo con un piano di aggiornamento: migrazioni dello schema per il backend, dump e restore per PostgreSQL.
 - Uid e gid sono numerici e fissi (999, 901:999, 101:999): su dhgeo il gid 999 è il gruppo `docker` e `systemd-journal` è 101, quindi mai `chown` per nome.
-- La porta 8086 si apre verso l'esterno solo con le regole `DOCKER-USER` attive (docs/MIGRAZIONE.md): Docker scavalca `ufw`.
+- La porta 8086 si sposta sull'IP di dhgeo solo con il firewall attivo (`sudo firewall-dhgeo stato` con codice 0; script nel repository Lizmap): Docker scavalca `ufw`.
 - Mai stream da `docker run` senza `--log-driver none`: lo stdout finisce nel log del container sul disco.
 - Git: mai commit su `main`. Un branch per attività (`feat/`, `fix/`, `docs/`, `chore/`, `refactor/`), commit in italiano, poi PR, merge e cancellazione del branch. `main` è protetto su GitHub: si arriva solo da PR con il check «regole» verde. Tag `prod-<data>` per ogni rilascio in produzione. Hook locale: `git config core.hooksPath .githooks`.
 - Mai segreti né dati nel repo: `.prod.env` e `.env` non sono versionati, `.prod.env.example` ha i valori oscurati.
